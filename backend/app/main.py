@@ -1,0 +1,84 @@
+"""FastAPI application entrypoint."""
+
+from __future__ import annotations
+
+import logging
+import time
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
+
+from . import models  # noqa: F401  (ensure models are registered)
+from .config import settings
+from .database import Base, engine, get_db
+from .redis_client import get_redis
+from .routers import pets, users
+from .schemas import HealthResponse
+
+logger = logging.getLogger("uvicorn.error")
+
+
+def _wait_for_db(retries: int = 30, delay: float = 2.0) -> None:
+    """Wait for MySQL to accept TCP connections.
+
+    On a cold start the official MySQL image initialises the database with
+    networking disabled, so the server isn't reachable over TCP for a while.
+    Rather than crash, retry until it's ready (or give up after ~retries*delay).
+    """
+    for attempt in range(1, retries + 1):
+        try:
+            with engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            return
+        except OperationalError:
+            if attempt == retries:
+                raise
+            logger.warning(
+                "Database not ready (attempt %d/%d); retrying in %.0fs…",
+                attempt, retries, delay,
+            )
+            time.sleep(delay)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    _wait_for_db()
+    # init.sql also creates these, but this makes local (non-docker) runs work.
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
+app = FastAPI(title="picopals API", version="1.0.0", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(users.router)
+app.include_router(pets.router)
+
+
+@app.get("/api/health", response_model=HealthResponse, tags=["meta"])
+def health() -> HealthResponse:
+    redis_ok = True
+    try:
+        get_redis().ping()
+    except Exception:
+        redis_ok = False
+
+    mysql_ok = True
+    try:
+        db = next(get_db())
+        db.execute(text("SELECT 1"))
+    except Exception:
+        mysql_ok = False
+
+    status = "ok" if redis_ok and mysql_ok else "degraded"
+    return HealthResponse(status=status, redis=redis_ok, mysql=mysql_ok)

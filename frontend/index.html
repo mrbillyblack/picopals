@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#1b2a1b" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    <title>picopals</title>
+  </head>
+  <body>
+    <!-- Top-left hamburger -->
+    <button id="hamburger" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <!-- Slide-in drawer -->
+    <div id="drawer-scrim" class="scrim" hidden></div>
+    <aside id="drawer" class="drawer" hidden aria-label="Menu">
+      <h2 class="drawer__title">picopals</h2>
+      <nav class="drawer__nav">
+        <button data-panel="settings" class="drawer__item">⚙️ Settings</button>
+        <button data-panel="about" class="drawer__item">ℹ️ About</button>
+        <button data-panel="reset" class="drawer__item drawer__item--danger">
+          ♻️ Reset
+        </button>
+      </nav>
+
+      <!-- Settings panel -->
+      <section id="panel-settings" class="panel" hidden>
+        <h3>Settings</h3>
+        <label class="field">
+          <span>Device color</span>
+          <div id="color-swatches" class="swatches"></div>
+        </label>
+        <label class="field field--row">
+          <span>Dark mode</span>
+          <input id="toggle-dark" type="checkbox" />
+        </label>
+        <div class="field">
+          <span>Your recovery code</span>
+          <code id="recovery-code" class="recovery">…</code>
+          <small>Write this down. Use it under “Recover” to restore your pet
+            on another device or after clearing your browser.</small>
+        </div>
+        <div class="field">
+          <span>Recover a pet</span>
+          <div class="field--row">
+            <input id="recover-input" type="text" placeholder="WARM-FROG-7Q2K" />
+            <button id="recover-btn" class="btn">Restore</button>
+          </div>
+          <small id="recover-msg" class="msg"></small>
+        </div>
+      </section>
+
+      <!-- About panel -->
+      <section id="panel-about" class="panel" hidden>
+        <h3>About</h3>
+        <p>
+          A tiny virtual pet you raise in your browser. An egg hatches after one
+          minute into one of four friends — a pup, a kitty, a frog, or a bunny.
+          Feed it, play with it, clean up, and keep it happy.
+        </p>
+        <p><strong>How to play:</strong></p>
+        <ul>
+          <li><strong>◀ A</strong> — move the cursor between icons</li>
+          <li><strong>● B</strong> — select / confirm</li>
+          <li><strong>▶ C</strong> — cancel / go back</li>
+        </ul>
+        <p class="muted">No login. Your pet lives on the server, tied to a
+          private ID on this device and your recovery code.</p>
+      </section>
+
+      <!-- Reset panel -->
+      <section id="panel-reset" class="panel" hidden>
+        <h3>Reset</h3>
+        <p>This abandons your current pet and lays a fresh egg. Your recovery
+          code stays the same. Are you sure?</p>
+        <div class="field--row">
+          <button id="reset-confirm" class="btn btn--danger">Yes, reset</button>
+          <button id="reset-cancel" class="btn">Cancel</button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- The device -->
+    <main class="stage">
+      <div id="device" class="device" data-color="teal">
+        <div class="device__brand">picopals</div>
+        <div class="screen">
+          <div class="screen__bezel">
+            <div class="iconrow iconrow--top" data-row="top"></div>
+            <canvas id="lcd" class="lcd" width="160" height="160"></canvas>
+            <div class="iconrow iconrow--bottom" data-row="bottom"></div>
+          </div>
+        </div>
+        <div class="buttons">
+          <button class="hwbtn" data-btn="A" aria-label="A: move">A</button>
+          <button class="hwbtn" data-btn="B" aria-label="B: select">B</button>
+          <button class="hwbtn" data-btn="C" aria-label="C: cancel">C</button>
+        </div>
+      </div>
+      <p class="hint">◀ A move &nbsp;·&nbsp; ● B select &nbsp;·&nbsp; ▶ C back</p>
+    </main>
+
+    <!-- transient toast -->
+    <div id="toast" class="toast" hidden></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

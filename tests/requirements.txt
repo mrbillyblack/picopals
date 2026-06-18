@@ -1,0 +1,4 @@
+# Install the backend's deps so `app` is importable, then the test-only tools.
+-r ../backend/requirements.txt
+pytest==8.2.2
+httpx==0.27.0

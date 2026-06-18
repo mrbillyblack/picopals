@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="picopals">
+  <rect width="512" height="512" rx="96" fill="#19b2a3"/>
+  <rect x="118" y="120" width="276" height="272" rx="120" fill="#20281c"/>
+  <rect x="150" y="156" width="212" height="200" rx="20" fill="#c3d89b"/>
+  <!-- a little pixel pet -->
+  <g fill="#1b2a1b">
+    <rect x="206" y="180" width="24" height="24"/>
+    <rect x="282" y="180" width="24" height="24"/>
+    <rect x="182" y="204" width="148" height="96"/>
+    <rect x="206" y="300" width="24" height="28"/>
+    <rect x="282" y="300" width="24" height="28"/>
+  </g>
+  <g fill="#c3d89b">
+    <rect x="214" y="232" width="16" height="16"/>
+    <rect x="282" y="232" width="16" height="16"/>
+  </g>
+  <circle cx="176" cy="430" r="26" fill="#11857a"/>
+  <circle cx="256" cy="430" r="26" fill="#11857a"/>
+  <circle cx="336" cy="430" r="26" fill="#11857a"/>
+</svg>

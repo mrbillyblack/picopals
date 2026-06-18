@@ -1,0 +1,22 @@
+# env
+.env
+
+# node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# docker / data
+*.log
+.DS_Store
+
+

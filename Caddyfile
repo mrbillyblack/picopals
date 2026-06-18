@@ -1,0 +1,21 @@
+# Caddy as the single reverse proxy / entrypoint.
+# Everything is served same-origin so the browser needs no CORS in production.
+{
+	# We terminate plain HTTP here; put a real TLS-terminating proxy or Caddy's
+	# automatic HTTPS in front for production by replacing ":80" with a hostname.
+	auto_https off
+}
+
+:80 {
+	encode gzip
+
+	# API traffic -> FastAPI (routes are already prefixed with /api inside FastAPI)
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+
+	# Everything else -> the static frontend (nginx serving the Vite build)
+	handle {
+		reverse_proxy frontend:80
+	}
+}
