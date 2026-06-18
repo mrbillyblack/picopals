@@ -8,10 +8,15 @@
   --accent: #2f9e7f;
   --danger: #d2453c;
 
-  /* device shell colors, overridden per [data-color] */
+  /* cartoon outline "ink" used for thick borders + chunky shadows */
+  --ink: #2c2a33;
+
+  /* device shell + complementary button colors, overridden per [data-color] */
   --shell: #19b2a3;
   --shell-dark: #128a7e;
   --shell-light: #54d8cb;
+  --btn: #ff7a5c;
+  --btn-dark: #e85d3d;
 }
 
 [data-theme='dark'] {
@@ -23,13 +28,13 @@
   --card-border: #2c313a;
 }
 
-/* ---- device color options -------------------------------------------- */
-.device[data-color='teal'] { --shell: #19b2a3; --shell-dark: #11857a; --shell-light: #5fdacd; }
-.device[data-color='pink'] { --shell: #f48fb1; --shell-dark: #c96a8c; --shell-light: #ffc1d6; }
-.device[data-color='butter'] { --shell: #f3c14b; --shell-dark: #cf9e2c; --shell-light: #ffe091; }
-.device[data-color='grape'] { --shell: #9b6cd1; --shell-dark: #7549a8; --shell-light: #c6a4ef; }
-.device[data-color='sky'] { --shell: #4aa6e8; --shell-dark: #2f7fbd; --shell-light: #8fccf6; }
-.device[data-color='charcoal'] { --shell: #3a4048; --shell-dark: #23272d; --shell-light: #5b636d; }
+/* ---- device color options (shell + a complementary button color) ------ */
+.device[data-color='teal']     { --shell: #19b2a3; --shell-dark: #11857a; --shell-light: #5fdacd; --btn: #ff7a5c; --btn-dark: #e85d3d; }
+.device[data-color='pink']     { --shell: #f48fb1; --shell-dark: #c96a8c; --shell-light: #ffc1d6; --btn: #2ec4b6; --btn-dark: #1f9e92; }
+.device[data-color='butter']   { --shell: #f3c14b; --shell-dark: #cf9e2c; --shell-light: #ffe091; --btn: #5a6cff; --btn-dark: #3f4fd6; }
+.device[data-color='grape']    { --shell: #9b6cd1; --shell-dark: #7549a8; --shell-light: #c6a4ef; --btn: #ffb13d; --btn-dark: #e0902a; }
+.device[data-color='sky']      { --shell: #4aa6e8; --shell-dark: #2f7fbd; --shell-light: #8fccf6; --btn: #ff9f43; --btn-dark: #e07e22; }
+.device[data-color='charcoal'] { --shell: #3a4048; --shell-dark: #23272d; --shell-light: #5b636d; --btn: #ff8a5b; --btn-dark: #e06a3b; }
 
 * { box-sizing: border-box; }
 
@@ -56,40 +61,56 @@ body {
 
 .hint { color: var(--muted); font-size: 0.85rem; margin: 0; }
 
-/* ---- device ---------------------------------------------------------- */
+/* ---- device (flat, cartoon "sticker" look) --------------------------- */
 .device {
   width: clamp(258px, 86vw, 372px);
-  background: linear-gradient(160deg, var(--shell-light), var(--shell) 45%, var(--shell-dark));
-  border-radius: 46% 46% 42% 42% / 38% 38% 46% 46%;
-  padding: clamp(1.2rem, 5vw, 1.9rem) clamp(1rem, 5vw, 1.7rem) clamp(1.4rem, 5vw, 2rem);
-  box-shadow:
-    inset 0 4px 12px rgba(255, 255, 255, 0.45),
-    inset 0 -10px 24px rgba(0, 0, 0, 0.22),
-    0 18px 40px rgba(0, 0, 0, 0.28);
+  background: var(--shell);
+  border: 5px solid var(--ink);
+  /* chunky egg-ish outline */
+  border-radius: 50% 50% 44% 44% / 38% 38% 50% 50%;
+  padding: clamp(1.1rem, 5vw, 1.7rem) clamp(1rem, 5vw, 1.7rem) clamp(1.4rem, 5vw, 2rem);
+  /* solid offset "lip" instead of soft realistic shadows */
+  box-shadow: 0 8px 0 0 var(--ink), 0 9px 18px rgba(0, 0, 0, 0.18);
   position: relative;
 }
 
-.device__brand {
-  text-align: center;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: lowercase;
-  color: rgba(0, 0, 0, 0.32);
-  font-size: clamp(0.7rem, 3.4vw, 0.9rem);
-  margin-bottom: 0.6rem;
+/* a little flat "shine" dot, like a printed highlight */
+.device::after {
+  content: '';
+  position: absolute;
+  top: clamp(0.9rem, 4vw, 1.4rem);
+  right: clamp(1.4rem, 7vw, 2.4rem);
+  width: clamp(14px, 4vw, 20px);
+  height: clamp(14px, 4vw, 20px);
+  border-radius: 50%;
+  background: var(--shell-light);
+  border: 3px solid var(--ink);
 }
 
-/* ---- screen ---------------------------------------------------------- */
+.device__brand {
+  width: fit-content;
+  margin: 0 auto 0.7rem;
+  padding: 0.15rem 0.75rem;
+  background: var(--ink);
+  color: var(--shell-light);
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  font-size: clamp(0.64rem, 3.2vw, 0.82rem);
+}
+
+/* ---- screen (flat ink frame) ----------------------------------------- */
 .screen {
-  background: #20281c;
-  border-radius: 50% / 16%;
-  padding: clamp(0.7rem, 3.5vw, 1.1rem);
-  box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.35), inset 0 6px 16px rgba(0, 0, 0, 0.5);
+  background: var(--ink);
+  border: 4px solid var(--ink);
+  border-radius: 20px;
+  padding: clamp(0.55rem, 3vw, 0.95rem);
 }
 
 .screen__bezel {
-  background: #161d12;
-  border-radius: 10px;
+  background: #141d10;
+  border-radius: 12px;
   padding: 0.5rem;
 }
 
@@ -146,18 +167,18 @@ body {
   width: clamp(46px, 14vw, 58px);
   height: clamp(46px, 14vw, 58px);
   border-radius: 50%;
-  border: none;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.45);
-  background: radial-gradient(circle at 35% 30%, var(--shell-light), var(--shell-dark));
-  box-shadow:
-    inset 0 3px 6px rgba(255, 255, 255, 0.5),
-    inset 0 -5px 10px rgba(0, 0, 0, 0.3),
-    0 5px 10px rgba(0, 0, 0, 0.25);
+  border: 4px solid var(--ink);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--btn);
+  /* chunky extruded base; collapses when pressed */
+  box-shadow: 0 6px 0 0 var(--btn-dark);
   cursor: pointer;
-  transition: transform 0.06s;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
 }
-.hwbtn:active { transform: translateY(2px); box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4); }
+.hwbtn:hover { filter: brightness(1.04); }
+.hwbtn:active { transform: translateY(6px); box-shadow: 0 0 0 0 var(--btn-dark); }
 
 /* ---- hamburger ------------------------------------------------------- */
 .hamburger {

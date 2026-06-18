@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: picopals
+
+resources:
+  - ../../base
+
+# Pin the images to an immutable tag/digest per release instead of :latest.
+images:
+  - name: REGION-docker.pkg.dev/PROJECT_ID/picopals/backend
+    newTag: "1.0.0"
+  - name: REGION-docker.pkg.dev/PROJECT_ID/picopals/frontend
+    newTag: "1.0.0"
+
+# Example of an environment-specific override:
+# patches:
+#   - target: { kind: Deployment, name: picopals-backend }
+#     patch: |
+#       - op: replace
+#         path: /spec/replicas
+#         value: 3

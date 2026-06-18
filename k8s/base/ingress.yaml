@@ -1,0 +1,32 @@
+# GKE Ingress = the single HTTPS entrypoint, doing what Caddy does locally:
+#   /api/*  -> backend Service (FastAPI)
+#   /*      -> frontend Service (nginx static)
+# Same-origin, so the browser still needs no CORS in production.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: picopals
+  namespace: picopals
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "picopals-cert"
+    # Reserve a global static IP and point your DNS A record at it:
+    #   gcloud compute addresses create picopals-ip --global
+    kubernetes.io/ingress.global-static-ip-name: "picopals-ip"
+spec:
+  rules:
+    - host: picopals.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: picopals-backend
+                port: { number: 8000 }
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: picopals-frontend
+                port: { number: 80 }

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: picopals-backend
+  namespace: picopals
+  labels: { app: picopals-backend }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: picopals-backend }
+  template:
+    metadata:
+      labels: { app: picopals-backend }
+    spec:
+      serviceAccountName: picopals          # Workload Identity
+      containers:
+        - name: backend
+          # Push your image to Artifact Registry; replace the placeholders.
+          image: REGION-docker.pkg.dev/PROJECT_ID/picopals/backend:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef: { name: picopals-config }   # non-secret config
+            - secretRef:    { name: picopals-secrets }   # from Secret Manager
+          readinessProbe:
+            httpGet: { path: /api/health, port: 8000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /api/health, port: 8000 }
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 192Mi }
+            limits:   { cpu: 500m, memory: 384Mi }
+
+        # Sidecar: secure connection to Cloud SQL. The backend connects to
+        # 127.0.0.1:3306 (see DATABASE_URL), the proxy tunnels to the instance.
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.11.4
+          args:
+            - "--structured-logs"
+            - "--port=3306"
+            - "PROJECT_ID:REGION:INSTANCE_NAME"   # Cloud SQL connection name
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits:   { cpu: 200m, memory: 128Mi }

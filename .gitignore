@@ -19,4 +19,16 @@ htmlcov/
 *.log
 .DS_Store
 
+# --- Kubernetes / GCP secrets ---
+# The declarative manifests under k8s/ ARE committed; they reference secrets by
+# name only. Only files that would contain real secret VALUES are ignored here.
+k8s/**/secret.yaml
+k8s/**/*.secret.yaml
+k8s/**/secrets.env
+k8s/**/*.secret.env
+# Local kustomize overrides that may embed env-specific values
+k8s/**/*.local.yaml
+# GCP service-account key files (use Workload Identity instead of these)
+*-sa-key.json
+gcp-key.json
 

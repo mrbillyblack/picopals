@@ -1,0 +1,15 @@
+# Non-secret configuration (the safe half of the old .env). Secret values
+# (DATABASE_URL with its password, MYSQL_PASSWORD, etc.) live in Secret Manager
+# and arrive via the ExternalSecret -> picopals-secrets Secret.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: picopals-config
+  namespace: picopals
+data:
+  MYSQL_DATABASE: "picopals"
+  # Update to your real frontend origin(s):
+  CORS_ORIGINS: "https://picopals.example.com"
+  # Memorystore for Redis private endpoint. If you enable Redis AUTH, move this
+  # to the Secret instead (it would then contain a password).
+  REDIS_URL: "redis://REDIS_PRIVATE_IP:6379/0"

@@ -1,0 +1,10 @@
+# Google-managed TLS cert. Provisioning takes a few minutes after DNS for the
+# domain points at the Ingress's static IP.
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: picopals-cert
+  namespace: picopals
+spec:
+  domains:
+    - picopals.example.com

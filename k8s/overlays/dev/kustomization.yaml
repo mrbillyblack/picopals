@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: picopals
+
+resources:
+  - ../../base
+
+# Slim the dev environment down to a single replica each.
+patches:
+  - target: { kind: Deployment, name: picopals-backend }
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target: { kind: Deployment, name: picopals-frontend }
+    patch: |
+      - op: replace
+        path: /spec/replicas
+        value: 1
