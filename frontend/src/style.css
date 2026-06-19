@@ -1,3 +1,20 @@
+@import 'tailwindcss';
+
+/* Expose the app's CSS variables as Tailwind color tokens, so utilities like
+   `bg-card` / `text-fg` / `border-edge` automatically follow light/dark mode
+   (the underlying vars flip under [data-theme='dark']). */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-card: var(--card);
+  --color-fg: var(--text);
+  --color-muted: var(--muted);
+  --color-edge: var(--card-border);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-page: var(--page-bg);
+  --color-page2: var(--page-bg-2);
+}
+
 :root {
   --page-bg: #f3efe7;
   --page-bg-2: #e7e0d2;
@@ -36,8 +53,6 @@
 .device[data-color='sky']      { --shell: #4aa6e8; --shell-dark: #2f7fbd; --shell-light: #8fccf6; --btn: #ff9f43; --btn-dark: #e07e22; }
 .device[data-color='charcoal'] { --shell: #3a4048; --shell-dark: #23272d; --shell-light: #5b636d; --btn: #ff8a5b; --btn-dark: #e06a3b; }
 
-* { box-sizing: border-box; }
-
 html, body { height: 100%; margin: 0; }
 
 body {
@@ -60,6 +75,11 @@ body {
 }
 
 .hint { color: var(--muted); font-size: 0.85rem; margin: 0; }
+
+/* ====================================================================== */
+/*  The device + LCD are intentionally bespoke CSS (cartoon shapes, canvas */
+/*  screen, per-scheme colors) — utility classes don't express these well. */
+/* ====================================================================== */
 
 /* ---- device (flat, cartoon "sticker" look) --------------------------- */
 .device {
@@ -123,7 +143,7 @@ body {
   border-radius: 4px;
 }
 
-/* ---- icon strip ------------------------------------------------------ */
+/* ---- icon strip (device action icons) -------------------------------- */
 .iconrow {
   display: flex;
   justify-content: space-around;
@@ -155,7 +175,7 @@ body {
 }
 .icon--sel .icon__glyph { filter: none; }
 
-/* ---- hardware buttons ------------------------------------------------ */
+/* ---- hardware buttons (A / B / C) ------------------------------------ */
 .buttons {
   display: flex;
   justify-content: center;
@@ -180,118 +200,15 @@ body {
 .hwbtn:hover { filter: brightness(1.04); }
 .hwbtn:active { transform: translateY(6px); box-shadow: 0 0 0 0 var(--btn-dark); }
 
-/* ---- hamburger ------------------------------------------------------- */
-.hamburger {
-  position: fixed;
-  top: calc(env(safe-area-inset-top) + 0.8rem);
-  left: 0.9rem;
-  z-index: 30;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: var(--card);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-.hamburger span { width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
-
-/* ---- drawer ---------------------------------------------------------- */
-.scrim {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 40;
-}
-.drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 50;
-  width: min(86vw, 340px);
-  height: 100dvh;
-  overflow-y: auto;
-  background: var(--card);
-  border-right: 1px solid var(--card-border);
-  box-shadow: 6px 0 24px rgba(0, 0, 0, 0.25);
-  padding: 1.2rem 1.1rem 2rem;
-  animation: slidein 0.18s ease-out;
-}
-@keyframes slidein { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-
-.drawer__title { margin: 0.2rem 0 1rem; font-size: 1.2rem; }
-.drawer__nav { display: flex; flex-direction: column; gap: 0.5rem; }
-.drawer__item {
-  text-align: left;
-  padding: 0.7rem 0.8rem;
-  border-radius: 10px;
-  border: 1px solid var(--card-border);
-  background: transparent;
-  color: var(--text);
-  font-size: 0.98rem;
-  cursor: pointer;
-}
-.drawer__item:hover { background: var(--page-bg-2); }
-.drawer__item--danger { color: var(--danger); }
-
-.panel { margin-top: 1.2rem; border-top: 1px solid var(--card-border); padding-top: 1rem; }
-.panel h3 { margin-top: 0; }
-.panel p, .panel li { color: var(--text); line-height: 1.5; font-size: 0.92rem; }
-.muted { color: var(--muted); font-size: 0.85rem; }
-
-.field { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
-.field > span { font-weight: 600; font-size: 0.9rem; }
-.field--row { flex-direction: row; align-items: center; justify-content: space-between; gap: 0.5rem; }
-.field small { color: var(--muted); font-size: 0.78rem; line-height: 1.4; }
-
-.recovery {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  background: var(--page-bg-2);
-  padding: 0.5rem 0.7rem;
-  border-radius: 8px;
-  user-select: all;
-}
-
-input[type='text'] {
-  flex: 1;
-  padding: 0.55rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
-  background: var(--page-bg);
-  color: var(--text);
-  font-size: 0.95rem;
-  text-transform: uppercase;
-}
-
-.btn {
-  padding: 0.55rem 0.9rem;
-  border-radius: 8px;
-  border: 1px solid var(--card-border);
-  background: var(--accent);
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-.btn--danger { background: var(--danger); }
-
-.msg { font-size: 0.82rem; }
-.msg--ok { color: var(--accent); }
-.msg--err { color: var(--danger); }
-
+/* ---- settings color swatches (built dynamically in JS) --------------- */
 .swatches { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .swatch {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 2px solid var(--ink);
   cursor: pointer;
+  transition: transform 0.12s;
 }
 .swatch[data-color='teal'] { background: #19b2a3; }
 .swatch[data-color='pink'] { background: #f48fb1; }
@@ -299,23 +216,11 @@ input[type='text'] {
 .swatch[data-color='grape'] { background: #9b6cd1; }
 .swatch[data-color='sky'] { background: #4aa6e8; }
 .swatch[data-color='charcoal'] { background: #3a4048; }
-.swatch--active { border-color: var(--text); transform: scale(1.12); }
+.swatch--active { outline: 3px solid var(--text); outline-offset: 2px; transform: scale(1.12); }
 
-/* ---- toast ----------------------------------------------------------- */
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: calc(env(safe-area-inset-bottom) + 1.2rem);
-  transform: translateX(-50%);
-  z-index: 60;
-  background: rgba(20, 22, 26, 0.95);
-  color: #fff;
-  padding: 0.65rem 1rem;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  max-width: 86vw;
-  text-align: center;
-}
+/* ---- recover message (class set in JS) ------------------------------- */
+.msg { font-size: 0.82rem; }
+.msg--ok { color: var(--accent); }
+.msg--err { color: var(--danger); }
 
 [hidden] { display: none !important; }

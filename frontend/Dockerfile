@@ -6,9 +6,9 @@ WORKDIR /app
 ARG VITE_API_BASE=/api
 ENV VITE_API_BASE=$VITE_API_BASE
 
-COPY package.json ./
-# No lockfile is committed, so use install rather than ci.
-RUN npm install
+COPY package.json package-lock.json ./
+# Reproducible install from the committed lockfile.
+RUN npm ci
 COPY . .
 RUN npm run build
 
