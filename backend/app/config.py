@@ -16,6 +16,13 @@ class Settings:
         self.cors_origins: list[str] = [o.strip() for o in cors.split(",") if o.strip()]
         # How long a live pet sits in Redis before falling back to MySQL.
         self.redis_ttl_seconds: int = int(os.getenv("REDIS_TTL_SECONDS", "86400"))
+        # Expose Swagger/OpenAPI only where explicitly enabled (dev). Off in prod
+        # so the API schema isn't handed to attackers.
+        self.enable_docs: bool = os.getenv("ENABLE_DOCS", "false").lower() == "true"
+        # Rate limiting on by default; tests disable it to avoid needing Redis.
+        self.rate_limit_enabled: bool = (
+            os.getenv("RATE_LIMIT_ENABLED", "true").lower() == "true"
+        )
 
 
 settings = Settings()

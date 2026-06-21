@@ -12,6 +12,8 @@ import os
 os.environ.setdefault("DATABASE_URL", "sqlite+pysqlite:///./test_picopals.db")
 os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")
 os.environ.setdefault("CORS_ORIGINS", "http://localhost:5173")
+# Disable rate limiting so the suite isn't throttled and needs no Redis store.
+os.environ.setdefault("RATE_LIMIT_ENABLED", "false")
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402

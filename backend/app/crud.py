@@ -17,14 +17,18 @@ from sqlalchemy.orm import Session
 
 from . import models, pet_logic, redis_client
 
-# Human-friendly recovery code, e.g. "WARM-FROG-7Q2K". Avoids ambiguous chars.
+# Human-friendly recovery code, e.g. "WARM-FROG-7Q2KX9MN". Avoids ambiguous
+# chars. The random suffix carries the entropy: 32^8 ≈ 1.1e12 combinations, so
+# even with the per-IP rate limit lifted it's infeasible to brute force (vs the
+# old 4-char suffix ≈ 1e6, which was guessable in hours).
 _ADJECTIVES = ["WARM", "COZY", "JOLLY", "FUZZY", "SUNNY", "MINTY", "PERKY", "ZIPPY"]
 _NOUNS = ["FROG", "PUP", "KITTY", "BUNNY", "EGG", "STAR", "MOON", "BEAN"]
 _ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"  # no I/O/0/1
+_SUFFIX_LEN = 8
 
 
 def generate_recovery_code() -> str:
-    suffix = "".join(secrets.choice(_ALPHABET) for _ in range(4))
+    suffix = "".join(secrets.choice(_ALPHABET) for _ in range(_SUFFIX_LEN))
     return f"{secrets.choice(_ADJECTIVES)}-{secrets.choice(_NOUNS)}-{suffix}"
 
 

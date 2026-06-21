@@ -8,12 +8,16 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 
 from . import models  # noqa: F401  (ensure models are registered)
 from .config import settings
 from .database import Base, engine, get_db
+from .ratelimit import limiter
 from .redis_client import get_redis
 from .routers import pets, users
 from .schemas import HealthResponse
@@ -51,8 +55,23 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="picopals API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(
+    title="picopals API",
+    version="1.0.0",
+    lifespan=lifespan,
+    # Hide the API schema/docs unless explicitly enabled (dev only).
+    docs_url="/api/docs" if settings.enable_docs else None,
+    redoc_url="/api/redoc" if settings.enable_docs else None,
+    openapi_url="/api/openapi.json" if settings.enable_docs else None,
+)
 
+# Rate limiting: register the limiter, a 429 handler, and the middleware that
+# enforces the global default limits on every request.
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
+
+# CORS added last so it stays outermost (even 429s get CORS headers).
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,

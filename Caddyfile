@@ -9,6 +9,18 @@
 :80 {
 	encode gzip
 
+	# Security headers applied to every response (API + frontend), so there's a
+	# single source of truth and no duplicate CSP. HSTS only takes effect once
+	# you front this with HTTPS.
+	header {
+		-Server
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+	}
+
 	# API traffic -> FastAPI (routes are already prefixed with /api inside FastAPI)
 	handle /api/* {
 		reverse_proxy backend:8000

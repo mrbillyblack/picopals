@@ -1,0 +1,17 @@
+# Cloudflare Pages response headers for the picopals static frontend.
+# (Vite copies public/_headers -> dist/_headers, which Pages reads.)
+#
+# IMPORTANT: replace `https://api.example.com` below with your real backend
+# (Cloud Run) origin, e.g. https://api.picopals.app — the CSP connect-src must
+# allow it or the browser will block every API call.
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self' https://api.picopals.net; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'
+
+# Never cache the service worker, so updates roll out promptly.
+/sw.js
+  Cache-Control: no-cache

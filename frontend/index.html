@@ -14,80 +14,150 @@
   </head>
   <body>
     <!-- Top-left hamburger -->
-    <button id="hamburger" class="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
+    <button
+      id="hamburger"
+      aria-label="Open menu"
+      class="fixed left-3 top-[calc(env(safe-area-inset-top)_+_0.8rem)] z-30 flex h-11 w-11 flex-col items-center justify-center gap-1 rounded-xl border-2 border-ink bg-card shadow-[0_3px_0_0_var(--ink)] transition active:translate-y-[2px] active:shadow-none"
+    >
+      <span class="h-0.5 w-5 rounded bg-fg"></span>
+      <span class="h-0.5 w-5 rounded bg-fg"></span>
+      <span class="h-0.5 w-5 rounded bg-fg"></span>
     </button>
 
     <!-- Slide-in drawer -->
-    <div id="drawer-scrim" class="scrim" hidden></div>
-    <aside id="drawer" class="drawer" hidden aria-label="Menu">
-      <h2 class="drawer__title">picopals</h2>
-      <nav class="drawer__nav">
-        <button data-panel="settings" class="drawer__item">⚙️ Settings</button>
-        <button data-panel="about" class="drawer__item">ℹ️ About</button>
-        <button data-panel="reset" class="drawer__item drawer__item--danger">
-          ♻️ Reset
+    <div id="drawer-scrim" class="fixed inset-0 z-40 bg-black/45" hidden></div>
+    <aside
+      id="drawer"
+      aria-label="Menu"
+      class="fixed inset-y-0 left-0 z-50 flex h-dvh w-[min(86vw,340px)] flex-col gap-5 overflow-y-auto border-r-4 border-ink bg-card p-5 text-fg shadow-2xl"
+      hidden
+    >
+      <h2 class="text-lg font-extrabold lowercase tracking-wide">picopals</h2>
+
+      <!-- icon-only navigation -->
+      <nav class="flex gap-3">
+        <button
+          data-panel="settings"
+          aria-label="Settings"
+          title="Settings"
+          class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-ink bg-page2 text-2xl shadow-[0_3px_0_0_var(--ink)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
+        >
+          ⚙️
+        </button>
+        <button
+          data-panel="about"
+          aria-label="About"
+          title="About"
+          class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-ink bg-page2 text-2xl shadow-[0_3px_0_0_var(--ink)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
+        >
+          ℹ️
+        </button>
+        <button
+          data-panel="reset"
+          aria-label="Reset"
+          title="Reset"
+          class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-danger bg-page2 text-2xl shadow-[0_3px_0_0_var(--danger)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
+        >
+          ♻️
         </button>
       </nav>
 
       <!-- Settings panel -->
-      <section id="panel-settings" class="panel" hidden>
-        <h3>Settings</h3>
-        <label class="field">
-          <span>Device color</span>
+      <section id="panel-settings" class="flex flex-col gap-5 border-t border-edge pt-4" hidden>
+        <h3 class="text-base font-bold">Settings</h3>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-semibold">Device color</span>
           <div id="color-swatches" class="swatches"></div>
-        </label>
-        <label class="field field--row">
-          <span>Dark mode</span>
-          <input id="toggle-dark" type="checkbox" />
-        </label>
-        <div class="field">
-          <span>Your recovery code</span>
-          <code id="recovery-code" class="recovery">…</code>
-          <small>Write this down. Use it under “Recover” to restore your pet
-            on another device or after clearing your browser.</small>
         </div>
-        <div class="field">
-          <span>Recover a pet</span>
-          <div class="field--row">
-            <input id="recover-input" type="text" placeholder="WARM-FROG-7Q2K" />
-            <button id="recover-btn" class="btn">Restore</button>
+
+        <label class="flex items-center justify-between gap-2">
+          <span class="text-sm font-semibold">Dark mode</span>
+          <input id="toggle-dark" type="checkbox" class="h-5 w-5 cursor-pointer accent-accent" />
+        </label>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-semibold">Your recovery code</span>
+          <code id="recovery-code" class="select-all rounded-lg bg-page2 px-3 py-2 text-lg font-bold tracking-wide">…</code>
+          <small class="text-xs leading-relaxed text-muted">
+            Write this down. Use it under “Recover” to restore your pet on
+            another device or after clearing your browser.
+          </small>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-semibold">Recover a pet</span>
+          <div class="flex items-center gap-2">
+            <input
+              id="recover-input"
+              type="text"
+              placeholder="WARM-FROG-7Q2K"
+              class="min-w-0 flex-1 rounded-lg border border-edge bg-page px-3 py-2 text-sm uppercase text-fg placeholder:normal-case placeholder:text-muted"
+            />
+            <button
+              id="recover-btn"
+              class="shrink-0 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white transition hover:brightness-105"
+            >
+              Restore
+            </button>
           </div>
           <small id="recover-msg" class="msg"></small>
         </div>
       </section>
 
       <!-- About panel -->
-      <section id="panel-about" class="panel" hidden>
-        <h3>About</h3>
+      <section
+        id="panel-about"
+        class="flex flex-col gap-3 border-t border-edge pt-4 text-sm leading-relaxed"
+        hidden
+      >
+        <h3 class="text-base font-bold">About</h3>
         <p>
           A tiny virtual pet you raise in your browser. An egg hatches after one
           minute into one of four friends — a pup, a kitty, a frog, or a bunny.
           Feed it, play with it, clean up, and keep it happy.
         </p>
-        <p><strong>How to play:</strong></p>
-        <ul>
-          <li><strong>◀ A</strong> — move the cursor between icons</li>
-          <li><strong>● B</strong> — select / confirm</li>
-          <li><strong>▶ C</strong> — cancel / go back</li>
+        <p class="font-semibold">How to play:</p>
+        <ul class="flex flex-col gap-1 pl-1">
+          <li><span class="font-bold">◀ A</span> — move the cursor between icons</li>
+          <li><span class="font-bold">● B</span> — select / confirm</li>
+          <li><span class="font-bold">▶ C</span> — cancel / go back</li>
         </ul>
-        <p class="muted">No login. Your pet lives on the server, tied to a
-          private ID on this device and your recovery code.</p>
+        <p class="text-xs text-muted">
+          No login. Your pet lives on the server, tied to a private ID on this
+          device and your recovery code.
+        </p>
       </section>
 
       <!-- Reset panel -->
-      <section id="panel-reset" class="panel" hidden>
-        <h3>Reset</h3>
-        <p>This abandons your current pet and lays a fresh egg. Your recovery
-          code stays the same. Are you sure?</p>
-        <div class="field--row">
-          <button id="reset-confirm" class="btn btn--danger">Yes, reset</button>
-          <button id="reset-cancel" class="btn">Cancel</button>
+      <section
+        id="panel-reset"
+        class="flex flex-col gap-3 border-t border-edge pt-4 text-sm leading-relaxed"
+        hidden
+      >
+        <h3 class="text-base font-bold">Reset</h3>
+        <p>
+          This abandons your current pet and lays a fresh egg. Your recovery code
+          stays the same. Are you sure?
+        </p>
+        <div class="flex items-center gap-2">
+          <button
+            id="reset-confirm"
+            class="rounded-lg bg-danger px-3 py-2 text-sm font-semibold text-white transition hover:brightness-105"
+          >
+            Yes, reset
+          </button>
+          <button
+            id="reset-cancel"
+            class="rounded-lg border border-edge px-3 py-2 text-sm font-semibold transition hover:bg-page2"
+          >
+            Cancel
+          </button>
         </div>
       </section>
     </aside>
 
-    <!-- The device -->
+    <!-- The device (bespoke CSS) -->
     <main class="stage">
       <div id="device" class="device" data-color="teal">
         <div class="device__brand">picopals</div>
@@ -108,7 +178,11 @@
     </main>
 
     <!-- transient toast -->
-    <div id="toast" class="toast" hidden></div>
+    <div
+      id="toast"
+      class="fixed bottom-[calc(env(safe-area-inset-bottom)_+_1.2rem)] left-1/2 z-[60] max-w-[86vw] -translate-x-1/2 rounded-xl bg-ink/95 px-4 py-2.5 text-center text-sm text-white shadow-xl"
+      hidden
+    ></div>
 
     <script type="module" src="/src/main.js"></script>
   </body>
