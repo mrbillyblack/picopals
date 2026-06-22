@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="picopals">
+  <!-- Full-bleed background (no transparency / no rounded corners): iOS rounds
+       it and Android masks it. Content stays within the central safe zone. -->
+  <rect width="512" height="512" fill="#19b2a3"/>
+  <!-- LCD screen frame -->
+  <rect x="100" y="100" width="312" height="312" rx="58" fill="#20281c"/>
+  <!-- LCD -->
+  <rect x="132" y="132" width="248" height="248" rx="22" fill="#c3d89b"/>
+  <!-- pixel pet (centered ~256) -->
+  <g fill="#1b2a1b">
+    <rect x="206" y="180" width="24" height="24"/>
+    <rect x="282" y="180" width="24" height="24"/>
+    <rect x="182" y="204" width="148" height="96"/>
+    <rect x="206" y="300" width="24" height="28"/>
+    <rect x="282" y="300" width="24" height="28"/>
+  </g>
+  <g fill="#c3d89b">
+    <rect x="214" y="232" width="16" height="16"/>
+    <rect x="282" y="232" width="16" height="16"/>
+  </g>
+</svg>

@@ -63,6 +63,19 @@ body {
   overscroll-behavior: none;
 }
 
+/* Disable the mobile double-tap-to-zoom gesture on controls. iOS Safari ignores
+   the viewport's user-scalable=no, but it honors touch-action: manipulation. */
+.device,
+button {
+  touch-action: manipulation;
+}
+
+/* The device chrome (A/B/C, icon labels, brand) is UI, not selectable text. */
+.device {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* ---- stage / layout -------------------------------------------------- */
 .stage {
   min-height: 100dvh;
