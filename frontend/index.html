@@ -24,23 +24,22 @@
       <span class="h-0.5 w-5 rounded bg-fg"></span>
     </button>
 
-    <!-- Slide-in drawer -->
-    <div id="drawer-scrim" class="fixed inset-0 z-40 bg-black/45" hidden></div>
+    <!-- Slide-in drawer (open/close animated via the .is-open class) -->
+    <div id="drawer-scrim" class="fixed inset-0 z-40 bg-black/45"></div>
     <aside
       id="drawer"
       aria-label="Menu"
       class="fixed inset-y-0 left-0 z-50 flex h-dvh w-[min(86vw,340px)] flex-col gap-5 overflow-y-auto border-r-4 border-ink bg-card p-5 text-fg shadow-2xl"
-      hidden
     >
       <h2 class="text-lg font-extrabold lowercase tracking-wide">picopals</h2>
 
       <!-- icon-only navigation -->
-      <nav class="flex gap-3">
+      <nav class="flex flex-col gap-3">
         <button
           data-panel="settings"
           aria-label="Settings"
           title="Settings"
-          class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-ink bg-page2 text-2xl shadow-[0_3px_0_0_var(--ink)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
+          class="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-ink bg-page2 text-2xl shadow-[0_3px_0_0_var(--ink)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
         >
           ⚙️
         </button>
@@ -48,7 +47,7 @@
           data-panel="about"
           aria-label="About"
           title="About"
-          class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-ink bg-page2 text-2xl shadow-[0_3px_0_0_var(--ink)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
+          class="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-ink bg-page2 text-2xl shadow-[0_3px_0_0_var(--ink)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
         >
           ℹ️
         </button>
@@ -56,7 +55,7 @@
           data-panel="reset"
           aria-label="Reset"
           title="Reset"
-          class="grid h-12 w-12 place-items-center rounded-2xl border-2 border-danger bg-page2 text-2xl shadow-[0_3px_0_0_var(--danger)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
+          class="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-danger bg-page2 text-2xl shadow-[0_3px_0_0_var(--danger)] transition hover:-translate-y-0.5 active:translate-y-[2px] active:shadow-none"
         >
           ♻️
         </button>

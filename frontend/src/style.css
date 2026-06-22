@@ -223,4 +223,34 @@ body {
 .msg--ok { color: var(--accent); }
 .msg--err { color: var(--danger); }
 
+/* ---- drawer open/close slide animation ------------------------------- */
+/* Driven by the .is-open class (toggled in main.js) instead of [hidden],
+   so the panel can transition. Closed = off-screen left + non-interactive. */
+#drawer-scrim {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+#drawer-scrim.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#drawer {
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform 0.22s ease, visibility 0.22s;
+}
+#drawer.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #drawer,
+  #drawer-scrim {
+    transition: none;
+  }
+}
+
 [hidden] { display: none !important; }

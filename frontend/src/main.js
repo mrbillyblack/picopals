@@ -99,14 +99,14 @@ const scrim = $('#drawer-scrim')
 const panels = ['settings', 'about', 'reset']
 
 function openDrawer() {
-  drawer.hidden = false
-  scrim.hidden = false
+  drawer.classList.add('is-open')
+  scrim.classList.add('is-open')
   // Refresh the recovery code each time it's opened.
   $('#recovery-code').textContent = game.getRecoveryCode() || '…'
 }
 function closeDrawer() {
-  drawer.hidden = true
-  scrim.hidden = true
+  drawer.classList.remove('is-open')
+  scrim.classList.remove('is-open')
   showPanel(null)
 }
 function showPanel(name) {
@@ -115,7 +115,7 @@ function showPanel(name) {
 
 $('#hamburger').addEventListener('click', openDrawer)
 scrim.addEventListener('click', closeDrawer)
-document.querySelectorAll('.drawer__item').forEach((item) => {
+document.querySelectorAll('[data-panel]').forEach((item) => {
   item.addEventListener('click', () => showPanel(item.dataset.panel))
 })
 
