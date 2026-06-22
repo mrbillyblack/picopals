@@ -21,11 +21,13 @@ def test_egg_does_not_decay():
 
 
 def test_egg_phase_progression():
+    # Use fractions of HATCH_SECONDS so this holds regardless of its value.
     egg = logic.new_egg(now=0.0)
-    assert logic.egg_phase(egg, now=5) == "idle"
-    assert logic.egg_phase(egg, now=25) == "rumbling"
-    assert logic.egg_phase(egg, now=45) == "cracking"
-    assert logic.egg_phase(egg, now=60) == "hatching"
+    h = logic.HATCH_SECONDS
+    assert logic.egg_phase(egg, now=h * 0.1) == "idle"
+    assert logic.egg_phase(egg, now=h * 0.5) == "rumbling"
+    assert logic.egg_phase(egg, now=h * 0.8) == "cracking"
+    assert logic.egg_phase(egg, now=h) == "hatching"
 
 
 def test_ready_to_hatch_boundary():

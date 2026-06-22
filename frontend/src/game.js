@@ -1,7 +1,7 @@
 import { api } from './api.js'
 import { store } from './store.js'
 import { createRenderer } from './render.js'
-import { POLL_MS } from './config.js'
+import { POLL_MS, HATCH_SECONDS } from './config.js'
 
 // The icon menu printed around the LCD (authentic 3-button navigation).
 export const ICONS = [
@@ -108,7 +108,7 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
     renderer.draw(view, { mode, dark: getDark(), eggElapsed: eggElapsed() }, nowMs)
 
     // Trigger the server-side hatch once the local animation completes.
-    if (view && view.species === 'egg' && eggElapsed() >= 60 && !hatchRequested) {
+    if (view && view.species === 'egg' && eggElapsed() >= HATCH_SECONDS && !hatchRequested) {
       hatchRequested = true
       hatch()
     }

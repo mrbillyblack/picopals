@@ -3,6 +3,7 @@
 // pixel-art aesthetic survives on any screen size.
 
 import { SPRITES, GRID } from './sprites.js'
+import { HATCH_SECONDS } from './config.js'
 
 const SIZE = 160
 const CELL = 8 // 16 * 8 = 128, leaving a 16px margin all around
@@ -33,11 +34,11 @@ export function createRenderer(canvas) {
 
   function drawEgg(pal, eggElapsed, nowMs) {
     const phase =
-      eggElapsed >= 60
+      eggElapsed >= HATCH_SECONDS
         ? 'hatching'
-        : eggElapsed >= 40
+        : eggElapsed >= HATCH_SECONDS * (2 / 3)
           ? 'cracking'
-          : eggElapsed >= 20
+          : eggElapsed >= HATCH_SECONDS / 3
             ? 'rumbling'
             : 'idle'
 

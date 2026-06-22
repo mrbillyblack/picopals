@@ -105,10 +105,10 @@ sleeps.
 
 | Time | Behaviour |
 |------|-----------|
-| 0–20s | egg sits still |
-| 20–40s | egg rumbles |
-| 40–60s | egg rumbles and cracks |
-| 60s | hatches into a random species |
+| 0–10s | egg sits still |
+| 10–20s | egg rumbles |
+| 20–30s | egg rumbles and cracks |
+| 30s | hatches into a random species |
 
 ## No login, but recoverable
 
