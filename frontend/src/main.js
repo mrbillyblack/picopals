@@ -19,6 +19,13 @@ const toastEl = $('#toast')
 // ---------------------------------------------------------------------------
 let settings = store.getSettings()
 
+// First visit: give them a random device color (then persist it so it sticks
+// across reloads and can still be changed in Settings).
+if (!store.hasSettings()) {
+  const random = COLORS[Math.floor(Math.random() * COLORS.length)].id
+  settings = store.setSettings({ color: random })
+}
+
 function applyTheme() {
   document.documentElement.dataset.theme = settings.dark ? 'dark' : 'light'
   deviceEl.dataset.color = settings.color

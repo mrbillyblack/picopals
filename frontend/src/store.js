@@ -16,6 +16,9 @@ export const store = {
   getRecoveryCode: () => localStorage.getItem(KEYS.recoveryCode) || '',
   setRecoveryCode: (code) => localStorage.setItem(KEYS.recoveryCode, code),
 
+  // True until the user's settings have been saved once (i.e. first visit).
+  hasSettings: () => localStorage.getItem(KEYS.settings) !== null,
+
   getSettings() {
     try {
       return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(KEYS.settings) || '{}') }
