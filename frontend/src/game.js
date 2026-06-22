@@ -23,7 +23,7 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
   let clockOffset = 0 // serverTime - localTime (seconds)
   let mode = 'main' // 'main' | 'status'
   let selected = 0
-  let hatchRequested = false
+  let lastHatchAt = 0 // performance.now() of the last hatch attempt (debounce)
   let busy = false
 
   // ---- icon strip ------------------------------------------------------
@@ -64,7 +64,6 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
   function setView(pet) {
     view = pet
     if (pet && pet.server_time) clockOffset = pet.server_time - Date.now() / 1000
-    if (pet && pet.species !== 'egg') hatchRequested = false
   }
 
   // ---- bootstrap -------------------------------------------------------
@@ -107,9 +106,13 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
     const nowMs = performance.now()
     renderer.draw(view, { mode, dark: getDark(), eggElapsed: eggElapsed() }, nowMs)
 
-    // Trigger the server-side hatch once the local animation completes.
-    if (view && view.species === 'egg' && eggElapsed() >= HATCH_SECONDS && !hatchRequested) {
-      hatchRequested = true
+    // Once the local animation completes, ask the server to hatch. Retry on a
+    // ~1.2s debounce (not every frame) until the species actually changes, so a
+    // borderline "not ready yet" response or a transient error can't leave the
+    // egg stuck strobing the hatch flash forever.
+    if (view && view.species === 'egg' && eggElapsed() >= HATCH_SECONDS &&
+        nowMs - lastHatchAt > 1200) {
+      lastHatchAt = nowMs
       hatch()
     }
     requestAnimationFrame(loop)
@@ -123,7 +126,7 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
         toast(`It hatched! Meet your ${data.pet.species}! 🎉`)
       }
     } catch {
-      hatchRequested = false // allow a retry on the next frame
+      /* transient — the loop retries on the next debounced tick */
     }
   }
 
