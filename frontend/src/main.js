@@ -108,8 +108,9 @@ const panels = ['settings', 'about', 'reset']
 function openDrawer() {
   drawer.classList.add('is-open')
   scrim.classList.add('is-open')
-  // Refresh the recovery code each time it's opened.
+  // Refresh the recovery code + current pet name each time it's opened.
   $('#recovery-code').textContent = game.getRecoveryCode() || '…'
+  $('#name-input').value = game.getName()
 }
 function closeDrawer() {
   drawer.classList.remove('is-open')
@@ -124,6 +125,20 @@ $('#hamburger').addEventListener('click', openDrawer)
 scrim.addEventListener('click', closeDrawer)
 document.querySelectorAll('[data-panel]').forEach((item) => {
   item.addEventListener('click', () => showPanel(item.dataset.panel))
+})
+
+// Name flow
+$('#name-btn').addEventListener('click', async () => {
+  const name = $('#name-input').value.trim()
+  const msg = $('#name-msg')
+  try {
+    await game.setName(name)
+    msg.textContent = name ? `Named ${name}!` : 'Name cleared'
+    msg.className = 'msg msg--ok'
+  } catch {
+    msg.textContent = 'Could not save the name.'
+    msg.className = 'msg msg--err'
+  }
 })
 
 // Reset flow

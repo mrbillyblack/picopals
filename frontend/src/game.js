@@ -194,11 +194,20 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
     return data
   }
 
+  async function setName(name) {
+    if (!userId) return
+    const data = await api.setName(userId, name)
+    setView(data.pet)
+    return data.pet
+  }
+
   return {
     start,
     button,
     reset,
     recover,
+    setName,
+    getName: () => (view && view.name ? view.name : ''),
     getRecoveryCode: () => store.getRecoveryCode(),
   }
 }

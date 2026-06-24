@@ -13,12 +13,12 @@ function mirror(left) {
 const BODY = [
   '...11111', // 4
   '..111111', // 5
-  '.1111111', // 6
-  '.1110111', // 7  <- eye hole at col 4
+  '.1100111', // 6  <- eyes, upper (2x2 blocks: cols 3-4, mirrored to 11-12)
+  '.1100111', // 7  <- eyes, lower
   '.1111111', // 8
   '.1111111', // 9
-  '.1111010', // 10 <- ":3" mouth, upper row (outer corners + center peak)
-  '.1111101', // 11 <- ":3" mouth, lower row (the two smile dips)
+  '.1111011', // 10 <- smile: corners turn up (cols 5 / 10)
+  '.1111100', // 11 <- smile: wide bottom (cols 6-9)
   '..111111', // 12
   '..111111', // 13
   '..111111', // 14
@@ -47,16 +47,17 @@ const EGG_CRACK_L = [
 // Frog is squatter and wider, so it gets a full bespoke set.
 const FROG_L = [
   '........', '...11...', '..1111..', '.111111.',
-  '11111111', '11111111', '11111111', '11110111', // eyes col 4
+  '11111111', '11111111', '11100111', '11100111', // eyes (2x2, cols 3-4)
   '11111111', '11111111', '11110111', '11111000', // "c:" grin (corners up, wide bottom)
   '11111111', '.1111111', '11111111', '11..11..', // webbed feet
 ]
 
 const POOP = ['...11...', '..1111..', '.111111.', '11111111']
 
+// The cells covering each eye, so the blink overlay can close them.
 export const EYES = [
-  [4, 7],
-  [11, 7],
+  [3, 6], [4, 6], [3, 7], [4, 7], // left eye (2x2)
+  [11, 6], [12, 6], [11, 7], [12, 7], // right eye (2x2)
 ]
 
 export const SPRITES = {

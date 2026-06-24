@@ -75,10 +75,11 @@ export function createRenderer(canvas) {
 
     drawGrid(ctx, sprite.grid, ox, oy, CELL, pal.px)
 
-    // Blink: paint the background over the eye cells for a beat.
+    // Blink: fill the (light) eye holes with the body color for a beat so the
+    // eyes briefly close.
     const blinking = nowMs % 4200 < 150
     if (blinking && sprite.eyes) {
-      ctx.fillStyle = pal.bg
+      ctx.fillStyle = pal.px
       for (const [ex, ey] of sprite.eyes) {
         ctx.fillRect(ox + ex * CELL, oy + ey * CELL, CELL, CELL)
       }
