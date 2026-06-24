@@ -15,7 +15,7 @@ export const ICONS = [
   { id: 'stats', glyph: '📊', label: 'Stats', action: '__status__', row: 'bottom' },
 ]
 
-export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
+export function createGame({ canvas, nameInput, topRow, bottomRow, getDark, toast }) {
   const renderer = createRenderer(canvas)
 
   let view = null
@@ -82,8 +82,20 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
       await createFresh()
     }
     buildIconStrip()
+    bindNameInput()
     setInterval(poll, POLL_MS)
     requestAnimationFrame(loop)
+  }
+
+  function bindNameInput() {
+    // Commit on blur / Enter; the loop repopulates from server state afterwards.
+    nameInput.addEventListener('change', () => setName(nameInput.value.trim()))
+    nameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        nameInput.blur()
+      }
+    })
   }
 
   async function createFresh() {
@@ -105,6 +117,15 @@ export function createGame({ canvas, topRow, bottomRow, getDark, toast }) {
   function loop() {
     const nowMs = performance.now()
     renderer.draw(view, { mode, dark: getDark(), eggElapsed: eggElapsed() }, nowMs)
+
+    // Pet-name editor overlay: only on the Stats screen for a hatched pet.
+    // Don't clobber what the user is typing (skip while it has focus).
+    const showName = mode === 'status' && !!view && view.species !== 'egg'
+    nameInput.hidden = !showName
+    if (showName && document.activeElement !== nameInput) {
+      nameInput.value = view.name || ''
+      nameInput.placeholder = view.species.toUpperCase()
+    }
 
     // Once the local animation completes, ask the server to hatch. Retry on a
     // ~1.2s debounce (not every frame) until the species actually changes, so a

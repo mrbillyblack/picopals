@@ -117,7 +117,7 @@ export function createRenderer(canvas) {
     ctx.font = 'bold 13px ui-monospace, monospace'
     ctx.textBaseline = 'top'
     const lines = [
-      view.name ? view.name : view.species.toUpperCase(),
+      '', // name is shown + edited via the #lcd-name HTML overlay
       '',
       'Hngr ' + hearts(view.hunger_hearts),
       'Hapy ' + hearts(view.happiness_hearts),

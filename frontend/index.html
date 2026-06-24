@@ -67,26 +67,6 @@
         <h3 class="text-base font-bold">Settings</h3>
 
         <div class="flex flex-col gap-2">
-          <span class="text-sm font-semibold">Pet name</span>
-          <div class="flex items-center gap-2">
-            <input
-              id="name-input"
-              type="text"
-              maxlength="16"
-              placeholder="Name your pal"
-              class="min-w-0 flex-1 rounded-lg border border-edge bg-page px-3 py-2 text-sm text-fg placeholder:text-muted"
-            />
-            <button
-              id="name-btn"
-              class="shrink-0 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white transition hover:brightness-105"
-            >
-              Save
-            </button>
-          </div>
-          <small id="name-msg" class="msg"></small>
-        </div>
-
-        <div class="flex flex-col gap-2">
           <span class="text-sm font-semibold">Device color</span>
           <div id="color-swatches" class="swatches"></div>
         </div>
@@ -185,7 +165,19 @@
         <div class="screen">
           <div class="screen__bezel">
             <div class="iconrow iconrow--top" data-row="top"></div>
-            <canvas id="lcd" class="lcd" width="160" height="160"></canvas>
+            <div class="lcd-wrap">
+              <canvas id="lcd" class="lcd" width="160" height="160"></canvas>
+              <!-- editable pet name, overlaid on the LCD on the Stats screen -->
+              <input
+                id="lcd-name"
+                type="text"
+                maxlength="16"
+                aria-label="Pet name"
+                spellcheck="false"
+                autocomplete="off"
+                hidden
+              />
+            </div>
             <div class="iconrow iconrow--bottom" data-row="bottom"></div>
           </div>
         </div>

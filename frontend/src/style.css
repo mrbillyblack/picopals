@@ -25,6 +25,9 @@
   --accent: #2f9e7f;
   --danger: #d2453c;
 
+  /* LCD "ink" — matches the canvas pixel color so the name input blends in. */
+  --lcd-ink: #1b2a1b;
+
   /* cartoon outline "ink" used for thick borders + chunky shadows */
   --ink: #2c2a33;
 
@@ -43,6 +46,7 @@
   --muted: #9aa3ad;
   --card: #1d2127;
   --card-border: #2c313a;
+  --lcd-ink: #86e36a;
 }
 
 /* ---- device color options (shell + a complementary button color) ------ */
@@ -155,6 +159,39 @@ button {
   image-rendering: pixelated;
   border-radius: 4px;
 }
+
+/* Editable pet name overlaid on the LCD (Stats screen). Transparent so the
+   canvas shows through; styled to read as on-screen pixel text. */
+.lcd-wrap {
+  position: relative;
+  container-type: inline-size;
+}
+#lcd-name {
+  position: absolute;
+  top: 6%;
+  left: 6.5%;
+  width: 85%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  -webkit-appearance: none; /* drop iOS Safari's native inner shadow/box */
+  background: transparent;
+  color: var(--lcd-ink);
+  caret-color: var(--lcd-ink);
+  /* the device sets user-select:none; re-enable it here so the name is editable */
+  user-select: text;
+  -webkit-user-select: text;
+  font-family: ui-monospace, 'Courier New', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  font-size: clamp(0.95rem, 5.5vw, 1.35rem); /* fallback */
+  font-size: 8.2cqw; /* ~match the 13/160 canvas text height */
+}
+#lcd-name:focus { outline: none; }
+#lcd-name::placeholder { color: var(--lcd-ink); opacity: 0.55; }
 
 /* ---- icon strip (device action icons) -------------------------------- */
 .iconrow {
