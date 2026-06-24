@@ -42,9 +42,14 @@ export function createRenderer(canvas) {
             ? 'rumbling'
             : 'idle'
 
-    // Hatch flash: strobe the whole screen just before the reveal.
+    // Hatch flash: a slow, gentle pulse just before the reveal. Toggling every
+    // 400ms = ~1.25 flashes/sec, well under the 3 Hz photosensitive-epilepsy
+    // threshold (WCAG 2.3.1). The cracking egg stays visible underneath rather
+    // than blanking to a bare screen, softening the contrast change.
     if (phase === 'hatching') {
-      if (Math.floor(nowMs / 120) % 2 === 0) {
+      const ex = (SIZE - GRID * CELL) / 2
+      drawGrid(ctx, SPRITES.egg_crack.grid, ex, ex, CELL, pal.px)
+      if (Math.floor(nowMs / 400) % 2 === 0) {
         ctx.fillStyle = pal.px
         ctx.fillRect(0, 0, SIZE, SIZE)
       }

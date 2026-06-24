@@ -11,6 +11,7 @@ between requests and robust to restarts.
 
 from __future__ import annotations
 
+import os
 import random
 import time
 from typing import Optional
@@ -24,11 +25,21 @@ CRACK_AT = HATCH_SECONDS * 2 / 3     # egg cracks at 2/3 of the way
 
 MAX_STAT = 4.0  # hunger / happiness / health are 0..4 "hearts"
 
-HUNGER_DECAY_SECONDS = 180.0      # lose 1 hunger heart every 3 min
-HAPPINESS_DECAY_SECONDS = 240.0   # lose 1 happiness heart every 4 min
-HEALTH_DECAY_SECONDS = 120.0      # lose 1 health heart per 2 min while neglected
-HEALTH_REGEN_SECONDS = 300.0      # slowly recover health when well cared for
-POOP_INTERVAL_SECONDS = 200.0     # a new poop appears this often
+# Master timescale for stat decay/regen/poop. LARGER = SLOWER, so the pet can be
+# left alone much longer between check-ins (like a real Tamagotchi you tend a few
+# times a day). Read from the PET_DECAY_SCALE env var so it can be retuned on
+# Cloud Run with just a config change (new revision), no image rebuild.
+#   1   = original fast timings (a hunger heart every ~3 min)
+#   24  = default (~1.2 h per hunger heart; ~5 h to fully empty if neglected)
+#   48  = even gentler (~once-a-day cadence)
+DECAY_SCALE = float(os.getenv("PET_DECAY_SCALE", "24"))
+
+# Base ("1x") timings below; the effective interval is base * DECAY_SCALE.
+HUNGER_DECAY_SECONDS = 180.0 * DECAY_SCALE     # base: 1 hunger heart / 3 min
+HAPPINESS_DECAY_SECONDS = 240.0 * DECAY_SCALE  # base: 1 happiness heart / 4 min
+HEALTH_DECAY_SECONDS = 120.0 * DECAY_SCALE     # base: 1 health heart / 2 min when neglected
+HEALTH_REGEN_SECONDS = 300.0 * DECAY_SCALE     # base: slow recovery when well cared for
+POOP_INTERVAL_SECONDS = 200.0 * DECAY_SCALE    # base: a new poop this often
 SICK_POOP_THRESHOLD = 3           # this many poops -> falls sick
 
 SPECIES = ("dog", "cat", "frog", "rabbit")
