@@ -18,7 +18,7 @@ from typing import Optional
 # ---------------------------------------------------------------------------
 # Tuning constants (seconds unless noted). Tweak to taste.
 # ---------------------------------------------------------------------------
-HATCH_SECONDS = 30  # egg -> pet (kept short so testers aren't waiting around)
+HATCH_SECONDS = 21  # egg -> pet (kept short so testers aren't waiting around)
 RUMBLE_AT = HATCH_SECONDS / 3        # egg starts wobbling at 1/3 of the way
 CRACK_AT = HATCH_SECONDS * 2 / 3     # egg cracks at 2/3 of the way
 

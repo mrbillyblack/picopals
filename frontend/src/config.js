@@ -6,7 +6,7 @@ export const POLL_MS = 5000
 
 // Egg hatch timeline (seconds). Must match HATCH_SECONDS in the backend's
 // pet_logic.py. Phases: idle -> rumbling (1/3) -> cracking (2/3) -> hatch.
-export const HATCH_SECONDS = 30
+export const HATCH_SECONDS = 21
 
 export const COLORS = [
   { id: 'teal', label: 'Teal' },
